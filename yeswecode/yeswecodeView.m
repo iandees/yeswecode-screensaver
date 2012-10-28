@@ -209,30 +209,24 @@
   // XXX Just get the seconds between the two dates
   // XXX Don't use dateWithNaturalLanguageString
   NSDate *now = [NSDate date];
-  NSDate *eDay = [NSDate dateWithNaturalLanguageString:@"11/7/2012"];
+  NSDate *eDay = [NSDate dateWithNaturalLanguageString:@"2012-11-07T00:00:00-05:00"];
 
   NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-  NSDateComponents *components = [gregorianCalendar components:NSDayCalendarUnit
-    fromDate:now
-    toDate:eDay
-    options:0];
+  unsigned int unitFlags = NSDayCalendarUnit |
+                           NSHourCalendarUnit |
+                           NSMinuteCalendarUnit |
+                           NSSecondCalendarUnit;
+  NSDateComponents *components = [gregorianCalendar components:unitFlags
+                                                      fromDate:now
+                                                        toDate:eDay
+                                                       options:0];
   NSString *timeLeft;
-  
+
   if ([components day] <= 0) {
     timeLeft = self.happyOrSad;
   }
   else {
-    // Time that has passed today
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *todayComponents = [calendar components:NSHourCalendarUnit|NSMinuteCalendarUnit|NSSecondCalendarUnit
-      fromDate:now];
-
-    long secondsLeft = 60 - [todayComponents second];
-    long minutesLeft = 60 - [todayComponents minute];
-    long hoursLeft = 24 - [todayComponents hour];
-    long daysLeft = [components day];
-
-    timeLeft = [NSString stringWithFormat:@"%ld days, %ld hours, %ld minutes and %ld seconds", daysLeft, hoursLeft, minutesLeft, secondsLeft];
+    timeLeft = [NSString stringWithFormat:@"%ld days, %ld hours, %ld minutes and %ld seconds", [components day], [components hour], [components minute], [components second]];
   }
 
   self.timeLeftLabel.stringValue = timeLeft;
