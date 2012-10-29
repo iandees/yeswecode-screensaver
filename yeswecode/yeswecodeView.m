@@ -226,7 +226,11 @@
     timeLeft = self.happyOrSad;
   }
   else {
-    timeLeft = [NSString stringWithFormat:@"%ld days, %ld hours, %ld minutes and %ld seconds", [components day], [components hour], [components minute], [components second]];
+      timeLeft = [NSString stringWithFormat:@"%ld day%@, %ld hour%@, %ld minute%@ and %ld second%@",
+        [components day], [components day] == 1 ? @"" : @"s",
+        [components hour], [components hour] == 1 ? @"" : @"s",
+        [components minute], [components minute] == 1 ? @"" : @"s",
+        [components second], [components second] == 1 ? @"": @"s"];
   }
 
   self.timeLeftLabel.stringValue = timeLeft;
